@@ -1,0 +1,34 @@
+require:
+  - rubocop-performance
+  - standard
+  - rubocop-rspec
+  - rubocop-rake
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.0
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_first_argument
+
+Layout/ExtraSpacing:
+  Enabled: true
+  ForceEqualSignAlignment: true
+
+Layout/HashAlignment:
+  Enabled: true
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
+  EnforcedLastArgumentHashStyle: ignore_implicit
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: compact
+
+Standard/SemanticBlocks:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/TernaryParentheses:
+  Enabled: false
