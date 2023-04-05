@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    openfeature-ruby-sdk-contrib (0.0.1)
+    openfeature-ruby-sdk-contrib (0.0.2)
       concurrent-ruby (~> 1.2.2)
       faraday (~> 2.7.4)
       openfeature-sdk (~> 0.1)

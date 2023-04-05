@@ -31,11 +31,13 @@ module OpenFeature
 
             return custom_parser.call(file_contents) if custom_parser
 
-            if format == :yaml
-              YAML.safe_load(file_contents)
-            else
-              JSON.parse(file_contents)
-            end
+            @flag_contents = if format == :yaml
+                               YAML.safe_load(file_contents)
+                             else
+                               JSON.parse(file_contents)
+                             end
+
+            @flag_contents
           end
         end
       end

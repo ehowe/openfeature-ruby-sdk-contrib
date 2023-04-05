@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "contrib/client"
 require_relative "contrib/version"
 require_relative "contrib/providers/common"
 require_relative "contrib/providers/file_provider"

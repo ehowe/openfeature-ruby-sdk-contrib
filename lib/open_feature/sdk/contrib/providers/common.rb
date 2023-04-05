@@ -116,6 +116,27 @@ module OpenFeature
             assert_type(value: source_value, default_value: default_value, return_types: [Hash])
           end
 
+          def read_all_values_with_cache
+            now = Time.now.to_i
+
+            read_from_cache = if !@flag_contents
+                                false
+                              elsif !@last_cache
+                                false
+                              elsif cache_duration == Float::INFINITY
+                                true
+                              else
+                                now - @last_cache < cache_duration
+                              end
+
+            unless read_from_cache
+              read_and_parse_flags
+              @last_cache = Time.now.to_i
+            end
+
+            deep_keys.empty? ? @flag_contents : @flag_contents.dig(*deep_keys)
+          end
+
           private
 
           # Returns a value for the requested flag_key
@@ -123,25 +144,7 @@ module OpenFeature
           # @param flag_key [String] requested flag key
           # @param type ["boolean", "number", "float", "string"]
           def read_value_with_cache(flag_key:, type:)
-            now = Time.now.to_i
-
-            read_from_cache = if !@flag_contents
-                                false
-                              elsif cache_duration == Float::INFINITY
-                                true
-                              elsif !@last_cache
-                                false
-                              else
-                                now - @last_cache < cache_duration
-                              end
-
-            unless read_from_cache
-              @last_cache    = Time.now.to_i
-              @flag_contents = read_and_parse_flags unless read_from_cache
-            end
-
-            flags = deep_keys.empty? ? @flag_contents : @flag_contents.dig(*deep_keys)
-            flag  = flags.detect { |f| f["kind"] == type && f["name"] == flag_key }
+            read_all_values_with_cache.detect { |f| f["kind"] == type && f["name"] == flag_key }
           end
 
           def read_and_parse_flags
