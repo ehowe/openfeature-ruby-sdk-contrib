@@ -68,7 +68,13 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+require "open_feature/sdk/contrib"
+
+OpenFeature::SDK.configure do |config|
+  config.provider = OpenFeature::SDK::Contrib::Providers::FileProvider.new(source: "path/to/file", format: :yaml)
+end
+```
 
 ## Development
 
