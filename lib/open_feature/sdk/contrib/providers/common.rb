@@ -118,15 +118,24 @@ module OpenFeature
           def read_value_with_cache(flag_key:, type:)
             now = Time.now.to_i
 
-            resolve_keys = lambda do |contents|
-              flag_contents = deep_keys.empty? ? contents : contents.dig(*deep_keys)
+            read_from_cache = if !@flag_contents
+                                false
+                              elsif cache_duration == Float::INFINITY
+                                true
+                              elsif !@last_cache
+                                false
+                              else
+                                now - @last_cache < cache_duration
+                              end
 
-              flag_contents.detect { |f| f["kind"] == type && f["name"] == flag_key }
+            unless read_from_cache
+              @last_cache    = Time.now.to_i
+              @flag_contents = read_and_parse_flags unless read_from_cache
             end
 
-            return resolve_keys.call(@flag_contents) if @flag_contents && (cache_duration == Float::INFINITY || (@last_cache && @flag_contents && now - @last_cache < cache_duration))
+            flags = deep_keys.empty? ? @flag_contents : @flag_contents.dig(*deep_keys)
 
-            @flag_contents = resolve_keys.call(read_and_parse_flags)
+            flags.detect { |f| f["kind"] == type && f["name"] == flag_key }
           end
 
           def read_and_parse_flags
