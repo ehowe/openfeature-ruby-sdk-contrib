@@ -1,17 +1,17 @@
 RSpec.shared_examples_for "returning nil" do |method, flag_key|
-  subject { instance.public_send(method, flag_key: flag_key) }
+  subject { instance.public_send(method, flag_key: flag_key).value }
 
   it { is_expected.to be_nil }
 end
 
 RSpec.shared_examples_for "returning the default value" do |method, flag_key, default_value|
-  subject { instance.public_send(method, flag_key: flag_key, default_value: default_value) }
+  subject { instance.public_send(method, flag_key: flag_key, default_value: default_value).value }
 
   it { is_expected.to eq(default_value) }
 end
 
 RSpec.shared_examples_for "raising an invalid type error" do |method, flag_key, default_value = nil|
-  subject { instance.public_send(method, flag_key: flag_key, default_value: default_value) }
+  subject { instance.public_send(method, flag_key: flag_key, default_value: default_value).value }
 
   it "raises an error" do
     expect { subject }.to raise_error(OpenFeature::SDK::Contrib::InvalidReturnValueError)
@@ -19,7 +19,7 @@ RSpec.shared_examples_for "raising an invalid type error" do |method, flag_key, 
 end
 
 RSpec.shared_examples_for "reading from the cache" do |method, flag_key, value|
-  subject { instance.public_send(method, flag_key: flag_key) }
+  subject { instance.public_send(method, flag_key: flag_key).value }
 
   before do
     instance.cache_duration = 60
@@ -35,7 +35,7 @@ RSpec.shared_examples_for "reading from the cache" do |method, flag_key, value|
 end
 
 RSpec.shared_examples_for "reading the value" do |method, flag_key, value|
-  subject { instance.public_send(method, flag_key: flag_key) }
+  subject { instance.public_send(method, flag_key: flag_key).value }
 
   it { is_expected.to eq(value) }
 end

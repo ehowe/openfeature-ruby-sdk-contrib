@@ -3,8 +3,15 @@ module OpenFeature
     module Contrib
       module Providers
         module Common
-          # TODO: Should figure out how to use this...
-          ResolutionDetails = Struct.new(:value, :reason, :variant, :error_code, :error_message)
+          ResolutionDetails = Struct.new(
+            :enabled,
+            :error_code,
+            :error_message,
+            :reason,
+            :value,
+            :variant,
+            keyword_init: true
+          )
 
           # @return [String]
           attr_reader :source
@@ -134,8 +141,7 @@ module OpenFeature
             end
 
             flags = deep_keys.empty? ? @flag_contents : @flag_contents.dig(*deep_keys)
-
-            flags.detect { |f| f["kind"] == type && f["name"] == flag_key }
+            flag  = flags.detect { |f| f["kind"] == type && f["name"] == flag_key }
           end
 
           def read_and_parse_flags
@@ -149,14 +155,14 @@ module OpenFeature
                              { "value" => default_value }
                            end
 
-            return actual_value if actual_value.nil?
+            return ResolutionDetails.new(value: nil) if actual_value.nil?
 
-            return_types = Array(return_types)
-            actual_value = actual_value["variants"] ? actual_value["variants"][actual_value["value"]] : actual_value["value"]
+            return_types  = Array(return_types)
+            variant_value = actual_value["variants"] ? actual_value["variants"][actual_value["value"]] : actual_value["value"]
 
-            raise OpenFeature::SDK::Contrib::InvalidReturnValueError, "Invalid flag value found: #{actual_value} is not in #{return_types.join(', ')}" unless return_types.include?(actual_value.class)
+            raise OpenFeature::SDK::Contrib::InvalidReturnValueError, "Invalid flag value found: #{variant_value} is not in #{return_types.join(', ')}" unless return_types.include?(variant_value.class)
 
-            actual_value
+            ResolutionDetails.new(value: variant_value, enabled: actual_value["enabled"], variant: actual_value["variant"])
           end
         end
       end
