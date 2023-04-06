@@ -134,7 +134,7 @@ module OpenFeature
               @last_cache = Time.now.to_i
             end
 
-            deep_keys.empty? ? @flag_contents : @flag_contents.dig(*deep_keys)
+            (deep_keys.empty? ? @flag_contents : @flag_contents.dig(*deep_keys) || [])
           end
 
           private
@@ -154,8 +154,8 @@ module OpenFeature
           def assert_type(value:, default_value:, return_types:)
             actual_value = if value && value["enabled"]
                              value
-                           elsif default_value
-                             { "value" => default_value }
+                           elsif defined?(default_value)
+                             { "value" => default_value, "enabled" => true }
                            end
 
             return ResolutionDetails.new(value: nil) if actual_value.nil?

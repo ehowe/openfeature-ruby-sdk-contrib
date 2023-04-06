@@ -27,7 +27,12 @@ module OpenFeature
           NAME = "File Provider".freeze
 
           def read_and_parse_flags
-            file_contents = File.read(File.expand_path(source))
+            file_contents = begin
+              File.read(File.expand_path(source))
+            rescue Errno::ENOENT
+              @flag_contents = {}
+              return
+            end
 
             return custom_parser.call(file_contents) if custom_parser
 
