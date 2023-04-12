@@ -1,4 +1,5 @@
 require "openfeature/sdk"
+require "erb"
 
 module OpenFeature
   module SDK
@@ -28,7 +29,7 @@ module OpenFeature
 
           def read_and_parse_flags
             file_contents = begin
-              File.read(File.expand_path(source))
+              ERB.new(File.read(File.expand_path(source))).result
             rescue Errno::ENOENT
               @flag_contents = {}
               return
