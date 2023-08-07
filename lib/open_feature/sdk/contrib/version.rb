@@ -3,7 +3,7 @@
 module OpenFeature
   module SDK
     module Contrib
-      VERSION = "0.0.5"
+      VERSION = "0.1.0"
     end
   end
 end
