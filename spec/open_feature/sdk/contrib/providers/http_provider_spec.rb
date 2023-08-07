@@ -1,16 +1,25 @@
 require "spec_helper"
 
-RSpec.describe OpenFeature::SDK::Contrib::Providers::FileProvider do
-  let(:file_path) { "/path/to/file" }
+RSpec.describe OpenFeature::SDK::Contrib::Providers::HttpProvider do
+  let(:uri) { URI("http://some_url/flags") }
+  let(:stubs) { Faraday::Adapter::Test::Stubs.new }
+  let(:conn) { Faraday.new { |b| b.adapter(:test, stubs) } }
   let(:deep_keys) { [] }
 
   before do
-    allow(File).to receive(:read).with(anything).and_call_original
-    allow(File).to receive(:read).with(file_path).and_return(flags)
+    allow(Faraday).to receive(:new).and_return(conn)
+
+    stubs.get(uri.path) do
+      [
+        200,
+        { 'Content-Type': file_format == :yaml ? 'application/yaml' : 'application/json' },
+        flags
+      ]
+    end
   end
 
-  shared_examples_for "file tests" do |ctx|
-    let(:instance) { described_class.new(source: file_path, format: file_format, deep_keys: deep_keys) }
+  shared_examples_for "url tests" do |ctx|
+    let(:instance) { described_class.new(source: uri.to_s, format: file_format, deep_keys: deep_keys) }
 
     context "with boolean values #{ctx}" do
       it_behaves_like "reading the value", :fetch_boolean_value, "example_boolean", true
@@ -41,7 +50,7 @@ RSpec.describe OpenFeature::SDK::Contrib::Providers::FileProvider do
 
       it_behaves_like "reading from the cache", :fetch_string_value, "example_named_string", "medium" do
         before do
-          expect(File).not_to receive(:read).with(file_path)
+          expect(conn).not_to receive(:get)
         end
       end
     end
@@ -77,21 +86,21 @@ RSpec.describe OpenFeature::SDK::Contrib::Providers::FileProvider do
     end
   end
 
-  it_behaves_like "file tests", "for yaml" do
+  it_behaves_like "url tests", "for yaml" do
     include_context "with yaml feature flags"
 
     let(:file_format) { :yaml }
     let(:raw) { raw_flags }
   end
 
-  it_behaves_like "file tests", "for json" do
+  it_behaves_like "url tests", "for json" do
     include_context "with json feature flags"
 
     let(:file_format) { :json }
     let(:raw) { raw_flags }
   end
 
-  it_behaves_like "file tests", "for deeply nested yaml" do
+  it_behaves_like "url tests", "for deeply nested yaml" do
     include_context "with deeply nested yaml feature flags"
 
     let(:deep_keys) { %w[deeply nested] }
@@ -99,7 +108,7 @@ RSpec.describe OpenFeature::SDK::Contrib::Providers::FileProvider do
     let(:raw) { deeply_nested_raw_flags }
   end
 
-  it_behaves_like "file tests", "for deeply nested json" do
+  it_behaves_like "url tests", "for deeply nested json" do
     include_context "with deeply nested json feature flags"
 
     let(:deep_keys) { %w[deeply nested] }

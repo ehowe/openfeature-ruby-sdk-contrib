@@ -28,8 +28,6 @@ RSpec.shared_examples_for "reading from the cache" do |method, flag_key, value|
   end
 
   it "returns the value from the cache without reading the file" do
-    expect(File).not_to receive(:read).with(file_path)
-
     expect(subject).to eq(value)
   end
 end

@@ -13,6 +13,9 @@ module OpenFeature
             keyword_init: true
           )
 
+          # @return [Hash]
+          attr_reader :extra_options
+
           # @return [String]
           attr_reader :source
 
@@ -42,11 +45,12 @@ module OpenFeature
           # @param custom_parser [#call<String>] If your file is not JSON or YAML you can pass a custom parser as a lambda here which will be used to parse the file instead.
           #   Even if your file is YAML or JSON you can pass this option if you opt to use a parser other than <tt>YAML.load</tt> or <tt>JSON.parse</tt>.
           #   The raw file contents will be passed to this Proc.
-          def initialize(source:, format: :yaml, deep_keys: [], cache_duration: Float::INFINITY, custom_parser: nil)
+          def initialize(source:, format: :yaml, deep_keys: [], cache_duration: Float::INFINITY, custom_parser: nil, extra_options: {})
             @source         = source
             @format         = format
             @deep_keys      = deep_keys
             @cache_duration = cache_duration
+            @extra_options  = extra_options
             @metadata       = Metadata.new(name: self.class::NAME).freeze
 
             if format == :yaml && !custom_parser
@@ -160,7 +164,7 @@ module OpenFeature
 
             return ResolutionDetails.new(value: nil) if actual_value.nil?
 
-            return_types  = Array(return_types)
+            return_types  = Array(return_types) + [NilClass]
             variant_value = actual_value["variants"] ? actual_value["variants"][actual_value["value"]] : actual_value["value"]
 
             raise OpenFeature::SDK::Contrib::InvalidReturnValueError, "Invalid flag value found: #{variant_value} is not in #{return_types.join(', ')}" unless return_types.include?(variant_value.class)

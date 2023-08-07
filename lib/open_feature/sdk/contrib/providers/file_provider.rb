@@ -10,7 +10,7 @@ module OpenFeature
         # To use <tt>FileProvider</tt>, it can be set during the configuration of the SDK
         #
         #   OpenFeature::SDK.configure do |config|
-        #     config.provider = OpenFeature::SDK::Contrib::FileProvider.new(file_path: "/path/to/file")
+        #     config.provider = OpenFeature::SDK::Contrib::Providers::FileProvider.new(source: "/path/to/file")
         #   end
         #
         # Within the <tt>FileProvider</tt>, the following methods exist
