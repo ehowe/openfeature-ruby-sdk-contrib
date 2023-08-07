@@ -30,16 +30,16 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   spec.add_dependency "concurrent-ruby", "~> 1.2.2"
-  spec.add_dependency "faraday", "~> 2.7.4"
+  spec.add_dependency "faraday", "~> 2.7.10"
   spec.add_dependency "openfeature-sdk", "~> 0.1"
 
   spec.add_development_dependency "pry-byebug", "~> 3.10.1"
   spec.add_development_dependency "rspec", "~> 3.11"
-  spec.add_development_dependency "rubocop", "~> 1.48"
+  spec.add_development_dependency "rubocop", "~> 1.55.1"
   spec.add_development_dependency "rubocop-performance", "~> 1.15"
   spec.add_development_dependency "rubocop-rake", "~> 0.6"
   spec.add_development_dependency "rubocop-rspec", "~> 2.19"
-  spec.add_development_dependency "standard", "~> 0.0"
+  spec.add_development_dependency "standard", ">= 1.0.0"
   spec.add_development_dependency "yard", "~> 0.9"
 
   # For more information and examples about making a new gem, check out our
