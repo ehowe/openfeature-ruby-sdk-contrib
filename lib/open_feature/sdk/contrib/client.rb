@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "openfeature/sdk/client"
 
 module OpenFeature

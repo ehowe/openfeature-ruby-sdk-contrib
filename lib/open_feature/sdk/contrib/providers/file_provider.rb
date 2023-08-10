@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "openfeature/sdk"
 require "erb"
 
@@ -25,15 +27,16 @@ module OpenFeature
         class FileProvider
           include Common
 
-          NAME = "File Provider".freeze
+          NAME = "File Provider"
 
           def read_and_parse_flags
             file_contents = begin
               ERB.new(File.read(File.expand_path(source))).result
             rescue Errno::ENOENT
               @flag_contents = {}
-              return
             end
+
+            return @flag_contents if @flag_contents
 
             return custom_parser.call(file_contents) if custom_parser
 

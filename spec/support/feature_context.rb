@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_context "with raw feature flags" do
   let(:raw_flags) do
     [
@@ -14,37 +16,37 @@ RSpec.shared_context "with raw feature flags" do
         "enabled" => true },
       { "name"    => "example_disabled_named_string",
         "kind"    => "string",
-        "value"   => "medium",
+        "variant" => "medium",
         "enabled" => false },
       { "name"     => "example_named_number",
         "kind"     => "number",
         "variants" => { "small" => 8, "medium" => 128, "large" => 2048 },
-        "value"    => "medium",
+        "variant"  => "medium",
         "enabled"  => true },
       { "name"     => "example_invalid_named_number",
         "kind"     => "number",
         "variants" => { "small" => "a string", "medium" => "a string", "large" => "a string" },
-        "value"    => "medium",
+        "variant"  => "medium",
         "enabled"  => true },
       { "name"     => "example_disabled_named_number",
         "kind"     => "number",
         "variants" => { "small" => 8, "medium" => 128, "large" => 2048 },
-        "value"    => "medium",
+        "variant"  => "medium",
         "enabled"  => false },
       { "name"     => "example_named_float",
         "kind"     => "float",
         "variants" => { "pi" => 3.141592653589793, "e" => 2.718281828459045, "phi" => 1.618033988749894 },
-        "value"    => "e",
+        "variant"  => "e",
         "enabled"  => true },
       { "name"     => "example_invalid_named_float",
         "kind"     => "float",
         "variants" => { "pi" => "a string", "e" => "a string", "phi" => "a string" },
-        "value"    => "e",
+        "variant"  => "e",
         "enabled"  => true },
       { "name"     => "example_disabled_named_float",
         "kind"     => "float",
         "variants" => { "pi" => 3.141592653589793, "e" => 2.718281828459045, "phi" => 1.618033988749894 },
-        "value"    => "e",
+        "variant"  => "e",
         "enabled"  => false }
     ]
   end

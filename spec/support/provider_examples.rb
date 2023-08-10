@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples_for "returning nil" do |method, flag_key|
   subject { instance.public_send(method, flag_key: flag_key).value }
 

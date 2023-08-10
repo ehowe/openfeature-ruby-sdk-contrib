@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe OpenFeature::SDK::Contrib::Providers::FileProvider do

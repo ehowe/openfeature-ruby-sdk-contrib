@@ -36,7 +36,16 @@ Metrics/AbcSize:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
 Metrics/PerceivedComplexity:
+  Enabled: false
+
+RSpec/ExpectInHook:
   Enabled: false
 
 RSpec/MessageSpies:
@@ -45,7 +54,7 @@ RSpec/MessageSpies:
 RSpec/MultipleExpectations:
   Enabled: false
 
-Standard/SemanticBlocks:
+Style/Documentation:
   Enabled: false
 
 Style/StringLiterals:

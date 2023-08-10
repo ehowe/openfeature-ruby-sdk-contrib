@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OpenFeature
   module SDK
     module Contrib
@@ -123,9 +125,7 @@ module OpenFeature
           def read_all_values_with_cache
             now = Time.now.to_i
 
-            read_from_cache = if !@flag_contents
-                                false
-                              elsif !@last_cache
+            read_from_cache = if !@flag_contents && !@last_cache
                                 false
                               elsif cache_duration == Float::INFINITY
                                 true
@@ -165,7 +165,7 @@ module OpenFeature
             return ResolutionDetails.new(value: nil) if actual_value.nil?
 
             return_types  = Array(return_types) + [NilClass]
-            variant_value = actual_value["variants"] ? actual_value["variants"][actual_value["value"]] : actual_value["value"]
+            variant_value = actual_value["variants"] ? actual_value["variants"][actual_value["variant"]] : actual_value["value"]
 
             raise OpenFeature::SDK::Contrib::InvalidReturnValueError, "Invalid flag value found: #{variant_value} is not in #{return_types.join(', ')}" unless return_types.include?(variant_value.class)
 

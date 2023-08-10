@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    openfeature-ruby-sdk-contrib (0.0.5)
+    openfeature-ruby-sdk-contrib (0.1.0)
       concurrent-ruby (~> 1.2.2)
       faraday (~> 2.7.10)
       openfeature-sdk (~> 0.1)
@@ -100,12 +100,12 @@ DEPENDENCIES
   openfeature-ruby-sdk-contrib!
   pry-byebug (~> 3.10.1)
   rake (~> 13.0)
-  rspec (~> 3.0)
-  rubocop (~> 1.21)
+  rspec (~> 3.11)
+  rubocop (~> 1.52.0)
   rubocop-performance (~> 1.15)
   rubocop-rake (~> 0.6)
   rubocop-rspec (~> 2.19)
-  standard (>= 1.0.0)
+  standard (>= 1.30.1)
   yard (~> 0.9)
 
 BUNDLED WITH

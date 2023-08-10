@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "openfeature/sdk"
 require "faraday"
 
@@ -25,11 +27,11 @@ module OpenFeature
         class HttpProvider
           include Common
 
-          NAME = "Http Provider".freeze
+          NAME = "Http Provider"
 
           def read_and_parse_flags
-            headers = extra_options.fetch(:headers, {})
-            uri = URI(source)
+            headers  = extra_options.fetch(:headers, {})
+            uri      = URI(source)
             base_url = "#{uri.scheme}://#{uri.host}:#{uri.port}"
 
             if format == :yaml
@@ -39,7 +41,7 @@ module OpenFeature
             end
 
             client = Faraday.new(url: base_url, **extra_options, headers: headers)
-            res = client.get(uri.request_uri)
+            res    = client.get(uri.request_uri)
 
             return custom_parser.call(res.body) if custom_parser
 
@@ -49,7 +51,7 @@ module OpenFeature
                                else
                                  JSON.parse(res.body)
                                end
-            rescue
+            rescue StandardError
               @flag_contents = {}
             end
 
