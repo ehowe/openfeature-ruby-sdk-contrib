@@ -35,7 +35,18 @@ RSpec.describe OpenFeature::SDK::Contrib::Providers::HttpProvider do
       it_behaves_like "raising an invalid type error", :fetch_boolean_value, "example_invalid_boolean"
       it_behaves_like "raising an invalid type error", :fetch_boolean_value, "not_a_value", "a string"
 
-      it_behaves_like "reading from the cache", :fetch_boolean_value, "example_boolean", true
+      it_behaves_like "reading from the cache", :fetch_boolean_value, "example_boolean", true do
+        before do
+          expect(conn).not_to receive(:get)
+        end
+      end
+
+      it_behaves_like "reading from the cache", :fetch_boolean_value, "example_boolean", true do
+        before do
+          instance.expire_cache!
+          expect(conn).to receive(:get).and_call_original
+        end
+      end
     end
 
     context "with string values #{ctx}" do
@@ -55,6 +66,13 @@ RSpec.describe OpenFeature::SDK::Contrib::Providers::HttpProvider do
           expect(conn).not_to receive(:get)
         end
       end
+
+      it_behaves_like "reading from the cache", :fetch_string_value, "example_named_string", "medium" do
+        before do
+          instance.expire_cache!
+          expect(conn).to receive(:get).and_call_original
+        end
+      end
     end
 
     context "with number values #{ctx}" do
@@ -69,7 +87,18 @@ RSpec.describe OpenFeature::SDK::Contrib::Providers::HttpProvider do
       it_behaves_like "raising an invalid type error", :fetch_number_value, "example_invalid_named_number"
       it_behaves_like "raising an invalid type error", :fetch_number_value, "not_a_value", true
 
-      it_behaves_like "reading from the cache", :fetch_number_value, "example_named_number", 128
+      it_behaves_like "reading from the cache", :fetch_number_value, "example_named_number", 128 do
+        before do
+          expect(conn).not_to receive(:get)
+        end
+      end
+
+      it_behaves_like "reading from the cache", :fetch_number_value, "example_named_number", 128 do
+        before do
+          instance.expire_cache!
+          expect(conn).to receive(:get).and_call_original
+        end
+      end
     end
 
     context "with float values #{ctx}" do
@@ -84,7 +113,18 @@ RSpec.describe OpenFeature::SDK::Contrib::Providers::HttpProvider do
       it_behaves_like "raising an invalid type error", :fetch_float_value, "example_invalid_named_float"
       it_behaves_like "raising an invalid type error", :fetch_float_value, "not_a_value", true
 
-      it_behaves_like "reading from the cache", :fetch_float_value, "example_named_float", 2.718281828459045
+      it_behaves_like "reading from the cache", :fetch_float_value, "example_named_float", 2.718281828459045 do
+        before do
+          expect(conn).not_to receive(:get)
+        end
+      end
+
+      it_behaves_like "reading from the cache", :fetch_float_value, "example_named_float", 2.718281828459045 do
+        before do
+          instance.expire_cache!
+          expect(conn).to receive(:get).and_call_original
+        end
+      end
     end
   end
 

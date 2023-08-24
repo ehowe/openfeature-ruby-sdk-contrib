@@ -62,6 +62,11 @@ module OpenFeature
             end
           end
 
+          def expire_cache!
+            @last_cache    = nil
+            @flag_contents = nil
+          end
+
           # Returns a boolean value for the key specified
           #
           # @param flag_key [String] flag key to search for
