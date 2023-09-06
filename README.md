@@ -68,12 +68,45 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
+If you are using rails, this code will go in an initializer. If you aren't, replace the assignments for `Rails.application.config.openfeature_provider` and `Rails.application.config.openfeature_client` with constants that you will have access to application-wide.
+
 ```
+
+### File Provider
+```
+
 require "open_feature/sdk/contrib"
 
-OpenFeature::SDK.configure do |config|
-  config.provider = OpenFeature::SDK::Contrib::Providers::FileProvider.new(source: "path/to/file", format: :yaml)
-end
+Rails.application.config.openfeature_provider = OpenFeature::SDK::Contrib::Providers::FileProvider.new(
+cache_duration: 300,
+deep_keys: ["flags"], # If your flags are nested inside of a response, this array is a list of keys that will get to the array where the actual flags are defined
+format: :yaml, # json or yaml
+source: "/path/to/file.yml"
+)
+
+Rails.application.config.openfeature_client = OpenFeature::SDK::Contrib::Client.new(
+client_options: { name: "your arbitrary client name" },
+provider: Rails.application.config.openfeature_provider
+)
+
+```
+
+
+### HTTP Provider
+require "open_feature/sdk/contrib"
+
+Rails.application.config.openfeature_provider = OpenFeature::SDK::Contrib::Providers::HttpProvider.new(
+  cache_duration: 300,
+  deep_keys: ["flags"], # If your flags are nested inside of a response, this array is a list of keys that will get to the array where the actual flags are defined
+  extra_options: { Authorization: "Bearer <some token>" }, # This object can be anything that gets passed to Faraday.new
+  format: :json, # json or yaml
+  source: "https://some.url/feature-flags"
+)
+
+Rails.application.config.openfeature_client = OpenFeature::SDK::Contrib::Client.new(
+  client_options: { name: "your arbitrary client name" },
+  provider: Rails.application.config.openfeature_provider
+)
 ```
 
 ## Development
