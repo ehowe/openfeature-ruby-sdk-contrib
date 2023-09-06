@@ -70,11 +70,9 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 If you are using rails, this code will go in an initializer. If you aren't, replace the assignments for `Rails.application.config.openfeature_provider` and `Rails.application.config.openfeature_client` with constants that you will have access to application-wide.
 
-```
-
 ### File Provider
-```
 
+```
 require "open_feature/sdk/contrib"
 
 Rails.application.config.openfeature_provider = OpenFeature::SDK::Contrib::Providers::FileProvider.new(
@@ -88,11 +86,11 @@ Rails.application.config.openfeature_client = OpenFeature::SDK::Contrib::Client.
 client_options: { name: "your arbitrary client name" },
 provider: Rails.application.config.openfeature_provider
 )
-
 ```
 
-
 ### HTTP Provider
+
+```
 require "open_feature/sdk/contrib"
 
 Rails.application.config.openfeature_provider = OpenFeature::SDK::Contrib::Providers::HttpProvider.new(
