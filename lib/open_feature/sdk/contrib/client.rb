@@ -14,6 +14,10 @@ module OpenFeature
           result = @provider.fetch_float_value(flag_key: flag_key, default_value: default_value, evaluation_context: evaluation_context)
           result.value
         end
+
+        def fetch_raw_flag(flag_key:)
+          @provider.fetch_raw_key(flag_key: flag_key)
+        end
       end
     end
   end

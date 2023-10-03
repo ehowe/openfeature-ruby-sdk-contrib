@@ -67,6 +67,10 @@ module OpenFeature
             @flag_contents = nil
           end
 
+          def fetch_raw_key(flag_key:)
+            read_all_values_with_cache.detect { |f| f["name"] == flag_key }
+          end
+
           # Returns a boolean value for the key specified
           #
           # @param flag_key [String] flag key to search for
