@@ -1,15 +1,41 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples_for "returning nil" do |method, flag_key|
+RSpec.shared_examples_for "returning nil" do |method, flag_key, default_value = nil|
   subject { instance.public_send(method, flag_key: flag_key).value }
 
   it { is_expected.to be_nil }
+
+  context "with a client" do
+    subject { client.public_send(method, flag_key: flag_key, default_value: default_value) }
+
+    let(:client) do
+      OpenFeature::SDK::Contrib::Client.new(
+        client_options: { name: "test" },
+        provider: instance
+      )
+    end
+
+    it { is_expected.to eq(default_value) }
+  end
 end
 
 RSpec.shared_examples_for "returning the default value" do |method, flag_key, default_value|
   subject { instance.public_send(method, flag_key: flag_key, default_value: default_value).value }
 
   it { is_expected.to eq(default_value) }
+
+  context "with a client" do
+    subject { client.public_send(method, flag_key: flag_key, default_value: default_value) }
+
+    let(:client) do
+      OpenFeature::SDK::Contrib::Client.new(
+        client_options: { name: "test" },
+        provider: instance
+      )
+    end
+
+    it { is_expected.to eq(default_value) }
+  end
 end
 
 RSpec.shared_examples_for "raising an invalid type error" do |method, flag_key, default_value = nil|
@@ -34,8 +60,21 @@ RSpec.shared_examples_for "reading from the cache" do |method, flag_key, value|
   end
 end
 
-RSpec.shared_examples_for "reading the value" do |method, flag_key, value|
+RSpec.shared_examples_for "reading the value" do |method, flag_key, value, default_value = nil|
   subject { instance.public_send(method, flag_key: flag_key).value }
 
   it { is_expected.to eq(value) }
+
+  context "with a client" do
+    subject { client.public_send(method, flag_key: flag_key, default_value: default_value) }
+
+    let(:client) do
+      OpenFeature::SDK::Contrib::Client.new(
+        client_options: { name: "test" },
+        provider: instance
+      )
+    end
+
+    it { is_expected.to eq(value) }
+  end
 end
