@@ -155,7 +155,7 @@ module OpenFeature
           # Returns a value for the requested flag_key
           #
           # @param flag_key [String] requested flag key
-          # @param type ["boolean", "number", "float", "string"]
+          # @param type ["boolean", "number", "float", "string", "array"]
           def read_value_with_cache(flag_key:, type:)
             read_all_values_with_cache.detect { |f| f["kind"] == type && f["name"] == flag_key }
           end

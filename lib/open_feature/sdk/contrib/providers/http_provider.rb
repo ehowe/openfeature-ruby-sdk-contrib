@@ -30,9 +30,10 @@ module OpenFeature
           NAME = "Http Provider"
 
           def read_and_parse_flags
-            headers  = extra_options.fetch(:headers, {})
-            uri      = URI(source)
-            base_url = "#{uri.scheme}://#{uri.host}:#{uri.port}"
+            headers                 = extra_options.fetch(:headers, {})
+            uri                     = URI(source)
+            base_url                = "#{uri.scheme}://#{uri.host}:#{uri.port}"
+            authentication_strategy = extra_options.delete(:authentication_strategy)
 
             if format == :yaml
               headers["Content-Type"] ||= "application/yaml"
@@ -40,8 +41,11 @@ module OpenFeature
               headers["Content-Type"] ||= "application/json"
             end
 
-            client = Faraday.new(url: base_url, **extra_options, headers: headers)
-            res    = client.get(uri.request_uri)
+            client = Faraday.new(url: base_url, **extra_options, headers: headers) do |conn|
+              conn.request(*authentication_strategy) if authentication_strategy
+            end
+
+            res = client.get(uri.request_uri)
 
             return custom_parser.call(res.body) if custom_parser
 

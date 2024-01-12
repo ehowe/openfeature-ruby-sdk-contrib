@@ -107,6 +107,32 @@ Rails.application.config.openfeature_client = OpenFeature::SDK::Contrib::Client.
 )
 ```
 
+#### Custom Auth Strategy
+
+Some applications may require more finesse to authenticate, for example, an OAuth Flow. To use this style flow, the `extra_options` key that is passed to `HttpProvider.new` accepts an `authentication_strategy` key. This key gets passed to the internal Faraday client as a middleware, so it can be anything usable as a Faraday middleware. Example:
+
+```
+  module FaradayMiddleware
+    class MyCustomMiddleware < Faraday::Middleware
+      def initialize(args)
+        # do stuff
+      end
+
+      def call(env)
+        @app.call(env)
+      end
+    end
+
+    Faraday::Request.register_middleware my_custom_middleware: -> { MyCustomMiddleware }
+  end
+
+  Rails.application.config.openfeature_provider = OpenFeature::SDK::Contrib::Providers::HttpProvider.new(
+    extra_options: {
+      authentication_strategy: [:my_custom_middleware, my_custom_middleware_arguments]
+    }
+  )
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

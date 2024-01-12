@@ -47,7 +47,12 @@ RSpec.shared_context "with raw feature flags" do
         "kind"     => "float",
         "variants" => { "pi" => 3.141592653589793, "e" => 2.718281828459045, "phi" => 1.618033988749894 },
         "variant"  => "e",
-        "enabled"  => false }
+        "enabled"  => false },
+      { "name"     => "example_named_array",
+        "kind"     => "array",
+        "variants" => { "default" => ["value 1", "value 2"], "other" => ["value 3", "value 4"] },
+        "variant"  => "other",
+        "enabled"  => true }
     ]
   end
 end
