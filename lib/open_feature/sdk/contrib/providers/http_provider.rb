@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "openfeature/sdk"
+require "open_feature/sdk"
 require "faraday"
 
 module OpenFeature
@@ -30,10 +30,12 @@ module OpenFeature
           NAME = "Http Provider"
 
           def read_and_parse_flags
-            headers                 = extra_options.fetch(:headers, {})
+            options                 = extra_options.clone
+            headers                 = options.fetch(:headers, {})
             uri                     = URI(source)
             base_url                = "#{uri.scheme}://#{uri.host}:#{uri.port}"
-            authentication_strategy = extra_options.delete(:authentication_strategy)
+            authentication_strategy = options.delete(:authentication_strategy)
+            logger                  = options.delete(:logger)
 
             if format == :yaml
               headers["Content-Type"] ||= "application/yaml"
@@ -41,8 +43,9 @@ module OpenFeature
               headers["Content-Type"] ||= "application/json"
             end
 
-            client = Faraday.new(url: base_url, **extra_options, headers: headers) do |conn|
+            client = Faraday.new(url: base_url, **options, headers: headers) do |conn|
               conn.request(*authentication_strategy) if authentication_strategy
+              conn.response(:logger, logger) if logger
             end
 
             res = client.get(uri.request_uri)

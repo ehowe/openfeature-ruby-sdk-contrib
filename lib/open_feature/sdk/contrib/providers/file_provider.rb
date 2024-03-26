@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "openfeature/sdk"
+require "open_feature/sdk"
 require "erb"
 
 module OpenFeature

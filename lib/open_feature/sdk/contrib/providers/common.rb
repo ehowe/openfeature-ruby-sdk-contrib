@@ -134,7 +134,7 @@ module OpenFeature
           def read_all_values_with_cache
             now = Time.now.to_i
 
-            read_from_cache = if !@flag_contents && !@last_cache
+            read_from_cache = if !@flag_contents || !@last_cache
                                 false
                               elsif cache_duration == Float::INFINITY
                                 true

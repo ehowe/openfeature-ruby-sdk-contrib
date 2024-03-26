@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "openfeature/sdk/client"
+require "open_feature/sdk/client"
 
 module OpenFeature
   module SDK
