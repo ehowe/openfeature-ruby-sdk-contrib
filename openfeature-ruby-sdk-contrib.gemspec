@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem
-  spec.add_dependency "concurrent-ruby", "~> 1.2.2"
+  spec.add_dependency "concurrent-ruby", "~> 1.2"
   spec.add_dependency "faraday", "~> 2.7.10"
   spec.add_dependency "openfeature-sdk", "~> 0.2.0"
 
